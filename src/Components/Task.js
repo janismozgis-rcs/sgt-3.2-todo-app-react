@@ -8,8 +8,7 @@ function Task({task}) {
     if (task.isCompleted) {
         deleteBtn = (
             <button className="btn btn-danger float-end">
-                <FontAwesomeIcon icon={faTrashAlt} pulse />
-               
+                <FontAwesomeIcon icon={faTrashAlt} />
             </button>
         )
     }

@@ -1,3 +1,4 @@
+import axios from "axios";
 import { useState, useEffect } from "react";
 import Task from './Task';
 
@@ -7,22 +8,31 @@ function TasksList() {
         items: [],
     });
 
-    useEffect(() => {
-        setInterval(() => {
-            // backend data received
+    const loadTasks = async () => {
+        try {
+            const url = 'http://localhost:8071/tasks';
+            const response = await axios.get(url);
             setTasks({
                 loading: false,
-                items: [
-                    {_id: '1111', title: 'Task 1', isCompleted: false},
-                    {_id: '2222', title: 'Task 2', isCompleted: false},
-                    {_id: '3333', title: 'Task 3', isCompleted: true},
-                ]
+                items: response.data,
             });
-        }, 2000);
+        } catch (e) {
+            alert('Whoops, something went wrong');
+            setTasks({
+                loading: false,
+                items: [],
+            });
+        }
+    }
+
+    useEffect(() => {
+        loadTasks();
     }, [])
 
     let content = <h5>Loading...</h5>
-    if (!tasks.loading) {
+    if (!tasks.loading && tasks.items.length == 0) {
+        content = <h5>No tasks added</h5>
+    } else if (!tasks.loading) {
         const taskElements = tasks.items.map((task, index) => <Task task={task} key={index} />)
 
         content = (

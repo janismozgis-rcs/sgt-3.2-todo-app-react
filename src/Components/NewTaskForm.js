@@ -1,3 +1,4 @@
+import Axios from "axios";
 import { useState } from "react";
 
 function NewTaskForm() {
@@ -8,7 +9,7 @@ function NewTaskForm() {
         setNewTaskName(event.target.value);
     }
 
-    const createNewTask = () => {
+    const createNewTask = async () => {
         if (newTaskName == '') {
             alert('Please fill the new task name!');
             return;
@@ -16,11 +17,32 @@ function NewTaskForm() {
 
         setSaving(true);
 
-        setTimeout(() => {
-            // todo sent stuff to server
+        const url = 'http://localhost:8071/tasks';
+        const data = {
+            title: newTaskName,
+            lables: [],
+        };
+        // Promesses approach
+        // Axios
+        //     .post(url, data)
+        //     .then(() => {
+        //         setSaving(false);
+        //         setNewTaskName('');
+        //     })
+        //     .catch(() => {
+        //         alert('Something went wrong when talking to the server');
+        //         setSaving(false);
+        //     });
+
+        // async/await approach
+        try {
+            await Axios.post(url, data);
             setSaving(false);
             setNewTaskName('');
-        }, 2000);
+        } catch (e) {
+            alert('Something went wrong when talking to the server');
+            setSaving(false);
+        }
     }
 
     let inputField = <input className="form-control" value={newTaskName} onChange={updateNewTaskName} />
