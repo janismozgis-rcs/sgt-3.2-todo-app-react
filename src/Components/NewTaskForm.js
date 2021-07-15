@@ -1,7 +1,7 @@
 import Axios from "axios";
 import { useState } from "react";
 
-function NewTaskForm() {
+function NewTaskForm({reloadTaskList}) {
     const [saving, setSaving] = useState(false);
     const [newTaskName, setNewTaskName] = useState('');
 
@@ -39,6 +39,7 @@ function NewTaskForm() {
             await Axios.post(url, data);
             setSaving(false);
             setNewTaskName('');
+            reloadTaskList();
         } catch (e) {
             alert('Something went wrong when talking to the server');
             setSaving(false);

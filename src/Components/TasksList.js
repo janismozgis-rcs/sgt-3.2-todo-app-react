@@ -2,13 +2,17 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 import Task from './Task';
 
-function TasksList() {
+function TasksList({counter, reloadTaskList}) {
     const [tasks, setTasks] = useState({
         loading: true,
         items: [],
     });
 
     const loadTasks = async () => {
+        setTasks({
+            loading: true,
+            items: [],
+        });
         try {
             const url = 'http://localhost:8071/tasks';
             const response = await axios.get(url);
@@ -27,13 +31,19 @@ function TasksList() {
 
     useEffect(() => {
         loadTasks();
-    }, [])
+    }, [counter])
 
     let content = <h5>Loading...</h5>
     if (!tasks.loading && tasks.items.length == 0) {
         content = <h5>No tasks added</h5>
     } else if (!tasks.loading) {
-        const taskElements = tasks.items.map((task, index) => <Task task={task} key={index} />)
+        const taskElements = tasks
+            .items
+            .map((task, index) => <Task 
+                task={task} 
+                key={index} 
+                reloadTaskList={reloadTaskList} 
+            />)
 
         content = (
             <ul className="list-group">

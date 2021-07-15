@@ -1,8 +1,15 @@
 import 'bootstrap/dist/css/bootstrap.css';
+import { useState } from 'react';
 import NewTaskForm from './Components/NewTaskForm';
 import TasksList from './Components/TasksList';
 
 function App() {
+    const [counter, setCounter] = useState(0);
+
+    const reloadTaskList = () => {
+        setCounter(counter + 1);
+    }
+
     return (
         <div className="container">
             <div className="row">
@@ -12,10 +19,10 @@ function App() {
             </div>
             <div className="row">
                 <div className="col">
-                    <TasksList />
+                    <TasksList reloadTaskList={reloadTaskList} counter={counter} />
                 </div>
             </div>
-            <NewTaskForm />
+            <NewTaskForm reloadTaskList={reloadTaskList} />
         </div>
     );
 }
